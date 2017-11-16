@@ -4,6 +4,14 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { Title } from '@angular/platform-browser';
 import { PropertiesService } from '../../services';
 
+/**
+ * Component declairation
+ * @param {ViewEncapsulation.None}} {  selector [description]
+ * @param      selector       The selector
+ * @param      templateUrl    The template url
+ * @param      styleUrls      The style urls
+ * @param      viewProviders  The view providers 
+ */
 @Component({
   selector: 'app-footer',
   templateUrl: './footer.component.html',
@@ -11,7 +19,9 @@ import { PropertiesService } from '../../services';
   encapsulation: ViewEncapsulation.None
 })
 
-// Footer component
+/**
+ * Footer component
+ */
 export class FooterComponent implements OnInit {
   
   /**
@@ -21,7 +31,6 @@ export class FooterComponent implements OnInit {
   			  private titleService: Title,
           private router: Router,
           private route:ActivatedRoute) {
-    // console.log(this.route);
   	this.initToolName();
   }
 

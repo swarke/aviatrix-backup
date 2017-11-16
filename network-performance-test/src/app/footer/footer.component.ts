@@ -4,6 +4,16 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { Title } from '@angular/platform-browser';
 import { PropertiesService } from '../../services';
 
+/**
+ * @brief      Component declairation
+ *
+ * @param      selector       The selector
+ * @param      templateUrl    The template url
+ * @param      styleUrls      The style urls
+ * @param      viewProviders  The view providers
+ *
+ * @return      Footer for tool
+ */
 @Component({
   selector: 'app-footer',
   templateUrl: './footer.component.html',

@@ -137,14 +137,13 @@ export class DashboardComponent implements AfterViewInit  {
       '#F7ED77', '#A5270A', '#C372D6', '#87AA77', '#FFDD00', '#D1B1AA',
       '#9D25BA', '#59824A', '#E5C31C', '#8E7A76', '#810687', '#212121'];
 
-      
       this.userLocation = {};
       this.latency = properties.NA_TEXT;
       this.responseTime = properties.NA_TEXT;
 
       this.lat = properties.NA_LATITUDE;
-      this.lng = properties.NA_LONGITUDE;    
-      
+      this.lng = properties.NA_LONGITUDE;
+
       this.disabledStart = false;
       this.isDesc = false;
       this.sortableColumn = "";
@@ -181,18 +180,11 @@ export class DashboardComponent implements AfterViewInit  {
   openDialog() {
     this.visibleSortOption = true;
     this.slimLoadingBarService.complete();
-     this.slimLoadingBarService.reset();
-     this.slimLoadingBarService.progress = 0;
-     this.isDesc = false;
-     this.sortBy('latency')
-   // if(this.bestLatencyRegion.latency != 0.00) {
-   //   if(this.bestLatencyRegion.latency != 0.00) {
-   //     let config = new MdDialogConfig();
-   //     let dialogRef:MdDialogRef<ModalComponent> = this.dialog.open(ModalComponent, config);
-   //     dialogRef.componentInstance.bestLatencyRegion = this.bestLatencyRegion;
-   //   }
-   // }  
-   this.toasterService.success(this.properties.TEST_SUCCESS_MESSAGE);
+    this.slimLoadingBarService.reset();
+    this.slimLoadingBarService.progress = 0;
+    this.isDesc = false;
+    this.sortBy('latency')
+    this.toasterService.success(this.properties.TEST_SUCCESS_MESSAGE);
   }
 
   /**
@@ -567,7 +559,6 @@ export class DashboardComponent implements AfterViewInit  {
       // Setting up latency chart
       this.setDataPoint(object.dashboardModel.latency, object);
       latencySeries.push(this.getSeriesData('spline', object.label, this.getChartData(object.dashboardModel.latency), object.color));
-      // setTimeout(()=>this.setLatency(index),10);
     }
     this.latencyOptions = this.getChartConfig('', this.properties.MILISECONDS, latencySeries, 'spline');
     this.impl_set_latency();
@@ -650,14 +641,11 @@ export class DashboardComponent implements AfterViewInit  {
       ping.ping(obj.url, function(error, delta2) {
           if(!current.isTestStopped) {
             let max = delta1 < delta2 ? delta1:delta2;
-            // if(obj && obj.dashboardModel && obj.dashboardModel.latency){
-              obj.dashboardModel.latency[obj.currentLatencyIndex].value = max;
-            // }
+            obj.dashboardModel.latency[obj.currentLatencyIndex].value = max;
+
             current.slimLoadingBarService.progress += current.progressFactor;
-            // if(current.latencyChart && current.latencyChart.series[index] && current.latencyChart.series[index].data)
-            // {
-              current.latencyChart.series[index].data[obj.currentLatencyIndex].update({"y": max});
-            // }
+            current.latencyChart.series[index].data[obj.currentLatencyIndex].update({"y": max});
+
             obj.currentLatencyIndex++;
             if (obj.currentLatencyIndex > 5) {
               obj.latencyCompleted = true;
@@ -666,87 +654,6 @@ export class DashboardComponent implements AfterViewInit  {
         } 
       });
     });
-
-        // let url = obj['url'] + 'ping' + cacheBuster;
-
-        // var ajaxSizeRequest = $.ajax({
-        //     type: "HEAD",
-        //     async: true,
-        //     url: url,
-        //     crossDomain : true,
-        //     error: function(message){
-        //       var pingStart = new Date();
-        //       var cacheBuster = "?nnn=" + pingStart;
-        //       url = obj['url'] + 'ping' + cacheBuster;
-        //       ajaxSizeRequest = $.ajax({
-        //           type: "GET",
-        //           async: true,
-        //           crossDomain : true,
-        //           url: url,
-        //           error: function(message){
-        //             if (obj.firstLatencyPass && !current.isPopupOpen) {
-        //               if(!current.isTestStopped) {
-        //                 let pingEnd = new Date();
-        //                 let ping: number = (pingEnd.getTime() - pingStart.getTime());
-        //                 console.log('Region: ' + obj.region_name + ' Latency: ' + Math.round(ping));
-        //                 // clearTimeout(obj.timeout);
-        //                 obj.dashboardModel.latency[obj.currentLatencyIndex].value = Math.round(ping);
-        //                 current.latencyChart.series[index].data[obj.currentLatencyIndex].update({"y": Math.round(ping)});
-        //                 obj.currentLatencyIndex++;
-        //                 current.slimLoadingBarService.progress += current.progressFactor;
-        //                 if (obj.currentLatencyIndex > 5) {
-        //                   obj.latencyCompleted = true;
-        //                 }
-        //               } else {
-        //                 current.getLatency(obj);
-        //                  obj.latencyCompleted = true;
-        //                 if(!current.disabledStart) {
-        //                   setTimeout(() => current.isProcessCompleted(), 5);
-        //                 }
-        //               }
-                      
-        //             } else {
-        //               obj.firstLatencyPass = true;
-        //             }
-        //           }
-        //       });
-        //     }
-        // });
-
-        // pingStart = new Date();
-        // download.onerror = function() {
-        //   let pingEnd = new Date();
-        //   let ping1: number = (pingEnd.getTime() - pingStart.getTime());
-        //   pingStart = new Date();
-        //   cacheBuster = "?nnn=" + pingStart;
-        //   cachebuster = Math.floor(new Date().getTime() / 1000);
-        //   pingStart = new Date();
-        //   download.onerror = function() {
-        //     // if (obj.firstLatencyPass && !current.isPopupOpen) {
-        //         if(!current.isTestStopped) {
-        //           let pingEnd = new Date();
-        //           let ping2: number = (pingEnd.getTime() - pingStart.getTime());
-        //           let max = ping1 < ping2 ? ping1:ping2;
-        //           current.slimLoadingBarService.progress += current.progressFactor;
-        //           obj.dashboardModel.latency[obj.currentLatencyIndex].value = Math.floor(max);
-        //           current.latencyChart.series[index].data[obj.currentLatencyIndex].update({"y": Math.floor(max)});
-        //           if (obj.currentLatencyIndex >= 5) {
-        //             obj.latencyCompleted = true;
-        //           }
-        //           obj.currentLatencyIndex++;
-        //           current.setLatency(index + 1);
-        //         } else {
-        //           current.getLatency(obj);
-        //            obj.latencyCompleted = true;
-        //           if(!current.disabledStart) {
-        //             setTimeout(() => current.isProcessCompleted(), 5);
-        //           }
-        //         }
-                
-        //   }
-        //   download.src = obj.url +'ping' + cacheBuster;
-        // }
-        // download.src = obj.url +'ping' + cacheBuster ;
   }
 
   /**
@@ -766,7 +673,6 @@ export class DashboardComponent implements AfterViewInit  {
       }
      if(_total_Latency_request) {
        obj.latency =  (_latency / _total_Latency_request).toFixed(2);
-       // console.log('Region: ' + obj.region_name + ' Average: ' + obj.latency);
      } else {
        obj.latency = 0.00;
      }
@@ -863,7 +769,6 @@ export class DashboardComponent implements AfterViewInit  {
           lat.push(obj.dashboardModel.latency[j].value + '\t');
         }
         lat.push(obj.dashboardModel.latency[5].value);
-        // console.log('Region: ' + obj.region_name, 'Lat: ' + lat);
       }
 
       this.isTestCompleted = true;
@@ -893,16 +798,9 @@ export class DashboardComponent implements AfterViewInit  {
          obj.color = this.chartColors[index];
          this.locations.push(obj);
         }
-        // let ping = new Ping();
-        // for(let i = 0;  i < this.locations.length; i++) {
-        //   ping.ping(this.locations[i]['public_ip'], function(error, delta) {
-        //     console.log(' Ping time was ' + String(delta) + ' ms');
-        //   });
-        // }
         let totalRegions = this.locations.length * 6;
         this.progressFactor = 100/totalRegions;
 
-        // this.generateMap();
         this.generateAmMap();
       },
         (error: any) => {
@@ -951,21 +849,6 @@ export class DashboardComponent implements AfterViewInit  {
     }
 
     let content = "";
-
-    // if(latency == "") {
-    //   content = "<strong>" + marker.region_name +"</strong>";
-    // } else {
-    //   content = '<table class="table table-bordered" width="100%">' +
-    //                 '<thead>' + 
-    //                   '<tr> <th style="text-align: center; border-top: none" colspan="2">'+ marker.region_name +'</th></tr>' +
-    //                   '<tr> <th style="text-align: center">'+ "Latency <br> (msec)"+'</th></tr>' +
-    //                 '</thead>' +
-    //                 '<tbody>' +
-    //                   '<tr><td style="text-align: center;">'+(latency == "" ? this.properties.NA_TEXT : latency) +'</td> </tr>' +
-    //                 '</tbody>' +
-    //               '</table>';
-    // }
-
     if(latency == "") {
       content = "<strong>" + marker.region_name +"</strong>";
     } else {
@@ -1141,8 +1024,6 @@ export class DashboardComponent implements AfterViewInit  {
       var polyline = L.polyline([[self.userLocation.latitude, self.userLocation.longitude], [object.lat, object.lng]], {color: object.color, weight: 1}).addTo(map);
       polyline.addTo(map);
 
-      // L.Polyline.Arc([self.userLocation.latitude, self.userLocation.longitude], [object.lat, object.lng], {color: object.color,  weight: 1,
-      // vertices: 50}).addTo(map);
     }
   }
 
@@ -1224,18 +1105,6 @@ export class DashboardComponent implements AfterViewInit  {
       }
 
       images.push(regionImg);
-
-      // images.push({
-      //   "imageURL": 'assets/E24725.svg',
-      //   "positionOnLine": 0,
-      //   "color": "#585869",
-      //   "animateAlongLine": true,
-      //   "lineId": "line" + index,
-      //   // "flipDirection": true,
-      //   "loop": true,
-      //   "scale": 0.03,
-      //   "positionScale": 1.8
-      // });
     }
 
     
@@ -1264,8 +1133,6 @@ export class DashboardComponent implements AfterViewInit  {
 
       "linesSettings": {
         "arc": -0.7, // this makes lines curved. Use value from -1 to 1
-        // "arrow": "middle",
-        // "arrowSize": 6,
         color: '#585869',
         thickness: 2,
         alpha: 0.7,

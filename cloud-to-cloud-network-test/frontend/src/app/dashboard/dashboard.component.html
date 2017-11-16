@@ -1,19 +1,17 @@
 <!-- Text on Dashboard image -->
 <div class="panel marquee short" id="network-white">
   <div class="content threecolumns tight">
-    <div class="column double" style="margin-left: 10px;">
+    <div class="column double margin-left-10">
       <h4 class="uppercase wide semitight-top">Multi-Cloud Network Performance&nbsp;Test</h4>
     </div>
   </div>
 </div>
-<!-- Loading Bar -->
-<!-- <ng2-slim-loading-bar [color]="'#e24301'"></ng2-slim-loading-bar> -->
 <!-- Left and Right Panel -->
-<div class="row mrg-top-15 padding-left-right-15">  
+<div class="row mrg-top-15 padding-left-right-15">
   <!-- Right panel -->
   <div class="col-md-6 pad-right-none">
-    <div class="card card-radious-none"  [ngClass]="{'height-94percent': (sourceTab || destinationTab) && !chartLoaded, 'height-96percent': (testTab || sourceTab || destinationTab) && chartLoaded}">
-      <div class="card-header cart-header-right-panel height-94percent" >
+    <div class="card card-radious-none" [ngClass]="{'height-94percent': (sourceTab || destinationTab) && !chartLoaded, 'height-96percent': (testTab || sourceTab || destinationTab) && chartLoaded}">
+      <div class="card-header cart-header-right-panel height-94percent">
         <!-- Right Panel tooltip and timestamp -->
         <div class="row">
           <div class="col-sm-7 padding-right-0">
@@ -59,7 +57,7 @@
           <div class="col-sm-12">
             <div class="row destination-tab" align="center">
               <div class="col-4 col-sm-4 cursor-pointer" [ngClass]="{'active-destination-menu': destinationCloudProvider == 'azure', 'non-active-destination-menu': destinationCloudProvider != 'azure'}" (click)="setDestinationCloudProvider('azure')">
-                <span class="cursor-pointer" >Azure</span>
+                <span class="cursor-pointer">Azure</span>
               </div>
               <div class="col-4 col-sm-4 cursor-pointer" [ngClass]="{'active-destination-menu': destinationCloudProvider == 'aws', 'non-active-destination-menu region-tab-border': destinationCloudProvider != 'aws'}" (click)="setDestinationCloudProvider('aws')">
                 <span class="">AWS</span>
@@ -154,17 +152,12 @@
                   <tr>
                     <th colspan="2" width="53%">
                       <span class="column-header" (click)="sortBy('region_name')">{{properties.RIGHT_PANEL_REGION_COLUMN_HEADER}} <i class="fa sort-style" [ngClass]="{'fa-sort': sortableColumn != 'region_name', 'fa-sort-asc': (sortableColumn == 'region_name' && isDesc), 'fa-sort-desc': (sortableColumn == 'region_name' && !isDesc) }" aria-hidden="true"> </i>
-                  </span>
+                      </span>
                     </th>
                     <th width="23%" class="padding-left-2">
                       <span class="column-header" (click)="sortBy('latency')">{{properties.RIGHT_PANEL_LATENCY_COLUMN_HEADER}} <i class="fa sort-style" [ngClass]="{'fa-sort': sortableColumn != 'latency', 'fa-sort-asc': (sortableColumn == 'latency' && isDesc), 'fa-sort-desc': (sortableColumn == 'latency' && !isDesc) }" aria-hidden="true"> </i>
-                  </span>
+                      </span>
                     </th>
-                    <!-- <th width="24%" class="padding-left-0">
-                      <span class="column-header" (click)="sortBy('bandwidth')">{{properties.RIGHT_PANEL_THROUGHPUT_COLUMN_HEADER}}
-                    <i class="fa sort-style" [ngClass]="{'fa-sort': sortableColumn != 'bandwidth', 'fa-sort-asc': (sortableColumn == 'bandwidth' && !isDesc), 'fa-sort-desc': (sortableColumn == 'bandwidth' && isDesc) }" aria-hidden="true"> </i>
-                  </span>
-                    </th> -->
                   </tr>
                 </thead>
               </table>
@@ -176,19 +169,11 @@
                 <tbody>
                   <tr *ngFor="let region of speedtestModel.destinationRegions">
                     <td class="width-7"><img src="{{region.logoUrl}}" alt="Region" width="17" height="17"></td>
-                    <td class="text-wrap" style="width:46%;">{{region.region_name}}</td>
-                    <td style="width: 23%; padding-left: 10%">
+                    <td class="text-wrap width-46per">{{region.region_name}}</td>
+                    <td class="latency-column">
                       <span *ngIf="!region.latency"> {{properties.NA_TEXT}}</span>
                       <span *ngIf="region.latency">{{region.latency}}</span>
                     </td>
-                    <!-- <td style="width: 24%; padding-left: 15px">
-                      <span *ngIf="!region.bandwidth">{{properties.NA_TEXT}}
-                        <img src="/assets/ic_remove.png" class="pull-right" alt="Region" width="17" height="17" style="cursor: pointer;" (click)="removeRegionFromDestination(region, region.cloudProvider);">
-                    </span>
-                      <span *ngIf="region.bandwidth">{{region.bandwidth}}
-                        <img src="/assets/ic_remove.png" class="pull-right" alt="Region" width="17" height="17" style="cursor: pointer;" (click)="removeRegionFromDestination(region, region.cloudProvider);">
-                    </span>
-                    </td> -->
                   </tr>
                   <div class="empty-destination-label" *ngIf="speedtestModel.destinationRegions.length < 1">
                     Click on destination(s) tab to select destination(s) region to start test
@@ -205,8 +190,7 @@
       <div class="flow-buttons-bottom">
         <a class="pull-left active-back-button" (click)="backTab();" *ngIf="destinationTab"><i class="fa fa-chevron-left padding-right-10" aria-hidden="true"></i> Previous</a>
         <button class="{{validate() ? 'pull-right btn btn-start next-button-common':'btn next_btn_disabled pull-right next-button-common'}}" (click)="nextTab();" [disabled]="!validate()" *ngIf="sourceTab"> Next <i class="fa fa-chevron-right padding-left-10" aria-hidden="true"></i></button>
-        <button class="{{validate() ? 'pull-right btn btn-start begin-test-button-common':'btn next_btn_disabled pull-right begin-test-button-common'}}" (click)="nextTab();" [disabled]="!validate()" *ngIf="destinationTab"> Begin Test  <i class="fa fa-play padding-left-10" aria-hidden="true"></i></button>
-        <!-- <button class="pull-right btn btn-start outline-none" (click)="startTest();" [disabled]="speedtestModel.destinationRegions.length < 1" *ngIf="!isTestCompleted && !disabledStart && testTab">Begin Test&nbsp;&nbsp;<i class="fa fa-play" aria-hidden="true"></i></button> -->
+        <button class="{{validate() ? 'pull-right btn btn-start begin-test-button-common':'btn next_btn_disabled pull-right begin-test-button-common'}}" (click)="nextTab();" [disabled]="!validate()" *ngIf="destinationTab"> Begin Test <i class="fa fa-play padding-left-10" aria-hidden="true"></i></button>
         <button class="btn btn-start outline-none" (click)="startTest();" [disabled]="speedtestModel.destinationRegions.length < 1" *ngIf="testTab">Restart Test<i class="fa fa-play padding-left-10" aria-hidden="true"></i></button>
       </div>
       <!-- End Next and Back buttons -->
@@ -224,14 +208,6 @@
               <i class="fa fa-info-circle fa-lg info-color cursor-pointer" aria-hidden="true" mdTooltip="{{properties.CLOUD_REGION_TOOLTIP}}"></i>
             </div>
           </div>
-          <!-- <div class="col-md-6">
-                  <div class="pull-right">
-                      <i class="fa fa-clock-o fa-lg clock" aria-hidden="true"></i>
-                      <select class="timestamp" [(ngModel)]="speedtestModel.timestamp" (ngModelChange)="changeTimestamp()">
-                          <option *ngFor="let range of dashboardModel.timeRanges" [value]="range.value"> {{ range.label }}</option>
-                      </select>
-                  </div>
-              </div> -->
         </div>
       </div>
       <div class="card-block padding-0">
@@ -240,38 +216,35 @@
     </div>
     <!-- Left panel with latency grapg -->
     <!-- <div class="col-md-6 pad-right-none"> -->
-      <div class="card card-radious-none">
-        <div class="card-header">
-          <div class="row">
-            <div class="col-md-9">
-              <h6 class="card-title card-title-margin">{{properties.LATENCY_CHART_HEADER}} <span>&nbsp; <i class="fa fa-info-circle fa-lg info-color cursor-pointer" aria-hidden="true" mdTooltip="{{properties.LATENCY_CHART_TOOLTIP}}" mdTooltipPosition="right"></i></span></h6></div>
-          </div>
-        </div>
-        <div class="card-block" #latencyCard>
-          <chart [options]="latencyOptions" (load)="latencyInstance($event.context)" *ngIf="latencyOptions !== null" class="chart-height" [ngClass]="{'display-block': chartLoaded}"></chart>
-          <h6 class="chart-label" *ngIf="!chartLoaded">Select source and destination(s) to begin test.</h6>
+    <div class="card card-radious-none">
+      <div class="card-header">
+        <div class="row">
+          <div class="col-md-9">
+            <h6 class="card-title card-title-margin">{{properties.LATENCY_CHART_HEADER}} <span>&nbsp; <i class="fa fa-info-circle fa-lg info-color cursor-pointer" aria-hidden="true" mdTooltip="{{properties.LATENCY_CHART_TOOLTIP}}" mdTooltipPosition="right"></i></span></h6></div>
         </div>
       </div>
-    <!-- </div> -->
-    <!-- End Left panel with latency grapg -->
+      <div class="card-block" #latencyCard>
+        <chart [options]="latencyOptions" (load)="latencyInstance($event.context)" *ngIf="latencyOptions !== null" class="chart-height" [ngClass]="{'display-block': chartLoaded}"></chart>
+        <h6 class="chart-label" *ngIf="!chartLoaded">Select source and destination(s) to begin test.</h6>
+      </div>
+    </div>
+    <!-- End Left panel with latency graph -->
   </div>
   <!-- End Left panel with map -->
 </div>
 <!-- End Right and left panel -->
 <!-- Left and Right panel for latency and throughput graphs -->
 <div class="row mrg-bottom-15 padding-left-right-15">
-  
 </div>
 <!-- End Left and Right panel for latency and throughput graphs -->
-
 <div *ngIf="isEmailPopOpen">
   <div class="md-overlay-container overlay">
     <div id="mat-overlay-0" class="mat-overlay-pane dialog-position">
       <div class="dialog-size">
-        <div style="text-align:center; padding:15px;">
+        <div class="email-marketo-form">
           <form name="emailForm" id="mktoForm_1143"></form>
         </div>
       </div>
     </div>
   </div>
- </div>
+</div>

@@ -5,6 +5,16 @@ import { Title } from '@angular/platform-browser';
 import { PropertiesService } from '../../services';
 import { CLOUD_TOOL} from '../app-config';
 
+/**
+ * @brief      Component declairation
+ *
+ * @param      selector       The selector
+ * @param      templateUrl    The template url
+ * @param      styleUrls      The style urls
+ * @param      viewProviders  The view providers
+ *
+ * @return      Header for tool
+ */
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',

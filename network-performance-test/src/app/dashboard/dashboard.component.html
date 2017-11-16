@@ -30,14 +30,14 @@
               <tr>
                 <th width="75%">
                   <span class="column-header" *ngIf="visibleSortOption" (click)="sortBy('region_name')">{{properties.RIGHT_PANEL_REGION_COLUMN_HEADER}} 
-                        <i class="fa sort-style" [ngClass]="{'fa-sort': sortableColumn != 'region_name', 'fa-sort-asc': (sortableColumn == 'region_name' && !isDesc), 'fa-sort-desc': (sortableColumn == 'region_name' && isDesc) }" aria-hidden="true"> </i>
+                        <i class="fa sort-style" id="sortRegionBtn" [ngClass]="{'fa-sort': sortableColumn != 'region_name', 'fa-sort-asc': (sortableColumn == 'region_name' && !isDesc), 'fa-sort-desc': (sortableColumn == 'region_name' && isDesc) }" aria-hidden="true"> </i>
                     </span>
                   <span class="column-header" *ngIf="!visibleSortOption">{{properties.RIGHT_PANEL_REGION_COLUMN_HEADER}} 
                     </span>
                 </th>
                 <th width="25%" class="padding-left-2">
                   <span class="column-header" *ngIf="visibleSortOption" (click)="sortBy('latency')">{{properties.RIGHT_PANEL_LATENCY_COLUMN_HEADER}} 
-                        <i class="fa sort-style" [ngClass]="{'fa-sort': sortableColumn != 'latency', 'fa-sort-asc': (sortableColumn == 'latency' && isDesc), 'fa-sort-desc': (sortableColumn == 'latency' && !isDesc) }" aria-hidden="true">
+                        <i class="fa sort-style" id="sortLatencyBtn" [ngClass]="{'fa-sort': sortableColumn != 'latency', 'fa-sort-asc': (sortableColumn == 'latency' && isDesc), 'fa-sort-desc': (sortableColumn == 'latency' && !isDesc) }" aria-hidden="true">
                         </i>
                     </span>
                   <span class="column-header" *ngIf="!visibleSortOption">{{properties.RIGHT_PANEL_LATENCY_COLUMN_HEADER}} 
@@ -61,8 +61,8 @@
         </div>
       </div>
       <div class="flow-buttons-bottom">
-        <button class="btn btn-stop pull-right" (click)="stopTest();" [disabled]="!disabledStart" *ngIf="disabledStart"> <i class="fa fa-stop" aria-hidden="true"></i>&nbsp;&nbsp;{{properties.STOP}}</button>
-        <button class="btn btn-start pull-right" (click)="startTest();" [disabled]="disabledStart" *ngIf="!disabledStart"><i class="fa fa-play" aria-hidden="true"></i>&nbsp;&nbsp;{{properties.START}}</button>
+        <button id="stopTestBtn" class="btn btn-stop pull-right" (click)="stopTest();" [disabled]="!disabledStart" *ngIf="disabledStart"> <i class="fa fa-stop" aria-hidden="true"></i>&nbsp;&nbsp;{{properties.STOP}}</button>
+        <button id="restartTestBtn" class="btn btn-start pull-right" (click)="startTest();" [disabled]="disabledStart" *ngIf="!disabledStart"><i class="fa fa-play" aria-hidden="true"></i>&nbsp;&nbsp;{{properties.START}}</button>
       </div>
     </div>
   </div>

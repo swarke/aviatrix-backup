@@ -5,6 +5,14 @@ import { Title } from '@angular/platform-browser';
 import { PropertiesService } from '../../services';
 import { CLOUD_TOOL} from '../app-config';
 
+/**
+ * Component declairation
+ * @param {ViewEncapsulation.None}} {  selector [description]
+ * @param      selector       The selector
+ * @param      templateUrl    The template url
+ * @param      styleUrls      The style urls
+ * @param      viewProviders  The view providers 
+ */
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
@@ -12,7 +20,9 @@ import { CLOUD_TOOL} from '../app-config';
   encapsulation: ViewEncapsulation.None
 })
 
-// Header component
+/**
+ * Header component
+ */
 export class HeaderComponent implements OnInit {
   
   /**
@@ -24,7 +34,9 @@ export class HeaderComponent implements OnInit {
           private route:ActivatedRoute) {
   	this.initToolName();
   }
-
+  /**
+   * Initialise the view
+   */
   ngOnInit() {
   }
 

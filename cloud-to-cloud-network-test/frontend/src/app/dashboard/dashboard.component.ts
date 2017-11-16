@@ -1,5 +1,5 @@
 // Import components
-import { Component, OnInit, AfterViewInit, ViewEncapsulation, Input } from '@angular/core';
+import { Component, AfterViewInit, ViewEncapsulation, Input } from '@angular/core';
 import { ChartModule } from 'angular2-highcharts';
 import { DashboardModel, SpeedtestModel, ChartModel } from '../../models';
 import { Response, Http } from '@angular/http';
@@ -14,6 +14,14 @@ declare const AmCharts: any;
 
 declare const MktoForms2: any;
 
+/**
+ * Component declairation
+ * @param {ViewEncapsulation.None}} {  selector [description]
+ * @param      selector       The selector
+ * @param      templateUrl    The template url
+ * @param      styleUrls      The style urls
+ * @param      viewProviders  The view providers 
+ */
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -22,8 +30,10 @@ declare const MktoForms2: any;
   encapsulation: ViewEncapsulation.None
 })
 
-// Dashboard component
-export class DashboardComponent implements OnInit, AfterViewInit {
+/**
+ * Dashboard component
+ */
+export class DashboardComponent implements AfterViewInit {
   sourceTab: boolean;
   destinationTab: boolean;
   testTab: boolean;
@@ -156,8 +166,6 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       this.testTab = true;
       this.currentTabIndex = 2;
     }
-    // this.isTestCompleted = true;
-    // this.disabledStart = false;
   }
 
   /**
@@ -242,19 +250,6 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     this.latencyChart = chartInstance;
   }
 
-  
-  /**
-   * throughput chart Instance
-   * [bandwidthInstance description] 
-   * @param {[type]} chartInstance [instance of throughput Highchart]
-   */
-  // bandwidthInstance(chartInstance) {
-  //   this.bandwidthChart = chartInstance;
-  // }
-
-  ngOnInit() {
-  }
-
   /**
    * After initialized view then get the inventory and set aws, azure and gce regions
    */
@@ -272,19 +267,8 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   changeSourceCloudProvider() {
     this.sourceCloudRegions = this.dashboardModel.locations[this.speedtestModel.sourceCloudProvider]
     this.speedtestModel.sourceCloudRegion = "";
-    // this.selectedAllAWSRegion = false;
-    // this.selectedAllAzureRegion = false;
-    // this.selectedAllGCERegion = false;
     this.isTestCompleted = false;
-    // if(this.chartLoaded) {
-    //   this.latencyChart.destroy();
-    // this.bandwidthChart.destroy();
-    // this.chartLoaded = false;
-    // }
-    // this.chartModel.clearModel();
-    // this.getCurrentSourceRegion();
     this.currentSourceRegion = null;
-    // this.clearGraphAndChart();
     this.generateAmMap();
   }
   
@@ -317,6 +301,10 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     this.generateAmMap();
   }
 
+  /**
+   * Select all cloud region.
+   * @param {any} destinationCloudProvider [description]
+   */
   getMarkSelectAllRegion(destinationCloudProvider: any) {
     if(destinationCloudProvider == 'azure') {
       let selectAll = true;
@@ -360,6 +348,11 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     }
   }
 
+  /**
+   * Remove seleted cloud cloud regions
+   * @param {any}     cloudProvider [description]
+   * @param {boolean} isSelected    [description]
+   */
   removeAllCloudRegions(cloudProvider: any, isSelected: boolean) {
     let regions = [];
     for(let index = 0; index < this.speedtestModel.destinationRegions.length; index++) {
@@ -372,6 +365,10 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     this.speedtestModel.destinationRegions = regions;
   }
 
+  /**
+   * select And Deselect All CloudRegions description
+   * @param {any} cloudProvider [description]
+   */
   selectAndDeselectAllCloudRegions(cloudProvider: any) {
     this.isTestCompleted = false;
     let cloud = "";
@@ -414,8 +411,10 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     }
   }
 
-
-
+  /**
+   * Deselect colud provider form selected cloud region after cloud provider change
+   * @param {any} cloudProvider [description]
+   */
   deselectAllCloudRegions(cloudProvider: any) {
     let cloud = "";
     if(cloudProvider == 'azure') {
@@ -443,23 +442,12 @@ export class DashboardComponent implements OnInit, AfterViewInit {
    * Change source region then remove all destination region list
    */
   changeSourceRegion() {
-    // this.selectedAllAWSRegion = false;
-    // this.selectedAllAzureRegion = false;
-    // this.selectedAllGCERegion = false;
     this.isTestCompleted = false;
-        // if(this.chartLoaded) {
-    //   this.latencyChart.destroy();
-    // this.bandwidthChart.destroy();
-    // this.chartLoaded = false;
-    // }
-    // this.chartModel.clearModel();
     this.getCurrentSourceRegion();
     this.removeRegionFromDestination(this.currentSourceRegion, this.speedtestModel.sourceCloudProvider);
     this.getMarkSelectAllRegion('aws');
     this.getMarkSelectAllRegion('azure');
     this.getMarkSelectAllRegion('gce');
-
-    // this.clearGraphAndChart();
     this.generateAmMap();
   }
 
@@ -508,13 +496,11 @@ export class DashboardComponent implements OnInit, AfterViewInit {
         for (let i = 0; this.chartLoaded && i < this.latencyChart.series.length ; i++) {
           if(this.latencyChart.series.length == 1) {
             this.latencyChart.destroy();
-            // this.bandwidthChart.destroy();
             this.chartLoaded = false;
             break;
           } 
           if(this.latencyChart.series[i].name == region.label) {
-            this.latencyChart.series[i].remove()
-            // this.bandwidthChart.series[i].remove();
+            this.latencyChart.series[i].remove();
             break;
           }
         }
@@ -525,6 +511,10 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     return false
   }
 
+  /**
+   * [cleanLatencyFromChartModel description]
+   * @param {any} destination_region [description]
+   */
   cleanLatencyFromChartModel(destination_region: any) {
     for (let index = 0; index < this.chartModel.chartData.length; index++) {
       if (this.chartModel.chartData[index]['destination_region'] == destination_region) {
@@ -533,6 +523,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       }
     }
   }
+
   /**
    * remove region from destination region list
    * [removeRegionFromDestination description]
@@ -545,7 +536,6 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     for (let index = 0; index < this.speedtestModel.destinationCloudRegions[cloudProvider].length; index++) {
       if (region.cloud_info.region === this.speedtestModel.destinationCloudRegions[cloudProvider][index]['cloud_info']['region'] && region.public_ip == this.speedtestModel.destinationCloudRegions[cloudProvider][index]['public_ip']) {
         this.speedtestModel.destinationCloudRegions[cloudProvider][index].latency = 0.0;
-        // this.speedtestModel.destinationCloudRegions[cloudProvider][index].bandwidth = 0.0;
         this.speedtestModel.destinationCloudRegions[cloudProvider].splice(index, 1);
         for (let step = 0; step < this.speedtestModel.destinationRegions.length; step++) {
           if (region.cloud_info.region === this.speedtestModel.destinationRegions[step]['cloud_info']['region'] && region.public_ip === this.speedtestModel.destinationRegions[step]['public_ip']) {
@@ -583,13 +573,11 @@ export class DashboardComponent implements OnInit, AfterViewInit {
         for (let i = 0; this.chartLoaded && i < this.latencyChart.series.length ; i++) {
           if(this.latencyChart.series.length == 1) {
             this.latencyChart.destroy();
-            // this.bandwidthChart.destroy();
             this.chartLoaded = false;
             break;
           } 
           if(this.latencyChart.series[i].name == region.label) {
             this.latencyChart.series[i].remove()
-            // this.bandwidthChart.series[i].remove();
             break;
           }
         }
@@ -615,8 +603,6 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       this.speedtestModel.destinationCloudRegions[this.destinationCloudProvider].push(region);
     }
     this.generateAmMap();
-
-    // console.log('regions: ', region);
   }
 
   /**
@@ -629,8 +615,6 @@ export class DashboardComponent implements OnInit, AfterViewInit {
         break;
       }
     }
-    // console.log('current location: ', this.currentSourceRegion);
-
   }
 
   /**
@@ -860,19 +844,12 @@ export class DashboardComponent implements OnInit, AfterViewInit {
    * Starts test for calculating the statistics.
    */
   startTest() {
-    // Start Loader
-    // if (this.isTestCompleted) {
-    //   return;
-    // }
     if(this.speedtestModel.destinationRegions.length < 1) {
       this.latencyChart.destroy();
-      // this.bandwidthChart.destroy();
       this.chartLoaded = false;
       return;
     }
     this.properties.isLoading = true;
-    // this.isTestCompleted = false;
-    // this.disabledStart = true;
     let latencySeries = [];
     let badwidthSeries = [];
     if(!this.isFormSubmitted) {
@@ -882,17 +859,13 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     
     this.dashboardService.getLatencyAndBandwidth(this.speedtestModel).timeout(3000).subscribe((resp: any) =>{
       let chartData = JSON.parse(resp);
-      // console.log('chart: ', chartData);
       this.chartModel.chartData = chartData['data'];
       for (let index = 0; index < this.speedtestModel.destinationRegions.length; index++) {
         latencySeries.push(this.getSeriesData('spline', this.speedtestModel.destinationRegions[index].label, this.getChartData(this.speedtestModel.destinationRegions[index].cloud_info.region, 'latency'), this.speedtestModel.destinationRegions[index].color));
-        // badwidthSeries.push(this.getSeriesData('spline', this.speedtestModel.destinationRegions[index].label, this.getChartData(this.speedtestModel.destinationRegions[index].cloud_info.region, 'throughput'), this.speedtestModel.destinationRegions[index].color));
       }
       this.updateLatencyAndBandwidthForDestinationCloud();
       this.latencyOptions = this.getChartConfig('', this.properties.MILISECONDS, latencySeries, 'spline');
-      // this.bandwidthOptions = this.getChartConfig('', this.properties.MBPS, badwidthSeries, 'spline');
       this.isTestCompleted = true;
-      // this.disabledStart = false;
       this.isDesc = false;
       this.sortBy('latency');
       this.chartLoaded = true;
@@ -916,9 +889,6 @@ export class DashboardComponent implements OnInit, AfterViewInit {
         if (data.latency != 0.0) {
           this.speedtestModel.destinationCloudRegions[key][index]['latency'] = data.latency;
         }
-        // if (data.bandwidth != 0.0) {
-        //   this.speedtestModel.destinationCloudRegions[key][index]['bandwidth'] = data.bandwidth;
-        // }
       }
     }
 
@@ -985,8 +955,6 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     }
   }
 
-  
-
   /**
    * Get Source cloud pin path
    */
@@ -1008,22 +976,18 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   getAvarageLatencyAndBandwidth(object: any) {
     let data = {
       "latency": 0.0,
-      // "bandwidth": 0.0
     }
     let latency = 0.0;
-    // let bandwidth = 0.0;
     let countSeries = 0;
     for (let index = 0; index < this.chartModel.chartData.length; index++) {
       if (this.chartModel.chartData[index]['destination_region'] == object.cloud_info.region) {
         countSeries++;
         latency += this.chartModel.chartData[index]['latency'];
-        // bandwidth += this.chartModel.chartData[index]['throughput'];
       }
     }
 
     if (countSeries != 0) {
       data.latency = parseFloat((latency / countSeries).toFixed(2));
-      // data.bandwidth = parseFloat((bandwidth / countSeries).toFixed(2));
     }
     return data;
   }
@@ -1099,42 +1063,24 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       for (let index = 0; index < this.latencyChart.series.length; index++) {
         if (this.latencyChart.series[index].name !== marker.label && hide) {
           this.latencyChart.series[index].setVisible(false, false);
-
-          // if (this.bandwidthChart && this.bandwidthChart.series) {
-          //   this.bandwidthChart.series[index].setVisible(false, false);
-          // }
         } else {
           this.latencyChart.series[index].setVisible(true, false);
-          // this.bandwidthChart.series[index].setVisible(true, false);
           if (hide) {
             this.latencyChart.series[index].update({
               dataLabels: {
                 enabled: true
               }
             }, false);
-
-            // this.bandwidthChart.series[index].update({
-            //   dataLabels: {
-            //     enabled: true
-            //   }
-            // }, false);
           } else {
             this.latencyChart.series[index].update({
               dataLabels: {
                 enabled: false
               }
             }, false);
-
-            // this.bandwidthChart.series[index].update({
-            //   dataLabels: {
-            //     enabled: false
-            //   }
-            // }, false);
           }
         }
       }
       this.latencyChart.redraw();
-      // this.bandwidthChart.redraw();
     }
   }
 
@@ -1283,7 +1229,6 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     }
     return null;
   }
-
 }
 
 // just an interface for type safety.
@@ -1293,5 +1238,3 @@ interface marker {
   label?: string;
   draggable: boolean;
 }
-
-
