@@ -1,0 +1,42 @@
+---
+
+  - name: create multiple instances
+    gce:
+      instance_names: "{{ asia_east1_a_region.instance_names }}"
+      zone: "{{ asia_east1_a_region.zone }}"
+      machine_type: f1-micro
+      image: ubuntu-1604
+      state: present
+      service_account_email: "{{ dev_env.service_account_email }}"
+      credentials_file: "{{ dev_env.credentials_file }}"
+      project_id: "{{ dev_env.project_id }}"
+      tags: 
+        - default-allow-http
+        - default-allow-ssh
+        - http-server
+      metadata : '{ "startup-script" : "apt-get update -y && apt-get install nginx -y && touch hello.txt && printf {{ dev_env.bash_script }} >> bash_aviatrix.sh", "ssh-keys": "azadmin:ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDRGdjS0HslOBAxgU5vqJQOlIeCeyHuaBuHTXmfQxaH8cvSbMi3PE92JRCMMhWsP9uoLtBYNVIpuDoU3REx5K50UCEkCqMNy6ozWK/R2jsqtb0TBpX9bzBsf7r+/GUVGuKXkooR5ubcmO9WnKnV9DjxC7jWmf8hYiR2D9RP7QSL1K3h6jAq+gcv18TzFEt86F5gTEr4iN7QNXLJDK4qUJCkcyrwv/JfbpD8lEsZwsN8B4yXGMHoyrOFR5RdjmiQaF511BrVoZY+l3jhxRDmZHT/G4U3uqePzd17e/i9qypEmBDWS/EfEhJ7hE2KEa2r1CQ1YFx8aIZGiICi7b9jFKRt azadmin" }'
+    register: gce_obj
+  
+  - name: Add region name in hosts
+    local_action: lineinfile 
+                  dest="./hosts" 
+                  regexp='(^\s+kernel(\s+(?!audit=1)[\w=/\-\.]+)*)\s*$'
+                  line=[{{ item.zone }}]
+    with_items: "{{ gce_obj.instance_data }}"
+
+  - name: Add the newly created EC2 instance(s) to the local host group (located inside the directory)
+    local_action: lineinfile 
+                  dest="./hosts" 
+                  regexp='(^\s+kernel(\s+(?!audit=1)[\w=/\-\.]+)*)\s*$'
+                  line={{ item.public_ip }}
+    with_items: "{{ gce_obj.instance_data }}"
+
+  - name: Wait for SSH for instances
+    wait_for:
+      delay: 1
+      host: "{{ item.public_ip }}"
+      port: 22
+      state: started
+      timeout: 30
+    with_items: "{{ gce_obj.instance_data }}"
+

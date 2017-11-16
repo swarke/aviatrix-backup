@@ -1,0 +1,38 @@
+- name: Execute the command in remote shell
+  shell: cd ../cloud-to-cloud-network-test/frontend/  && ng build --prod --aot
+
+- replace:
+    path: ../cloud-to-cloud-network-test/frontend/dist/index.html
+    regexp: '<link href="styles.'
+    replace: '<link href="/multicloud/styles.'
+
+- replace:
+    path: ../cloud-to-cloud-network-test/frontend/dist/index.html
+    regexp: 'src="inline.'
+    replace: 'src="/multicloud/inline.'
+
+- replace:
+    path: ../cloud-to-cloud-network-test/frontend/dist/index.html
+    regexp: 'src="polyfills.'
+    replace: 'src="/multicloud/polyfills.'
+
+- replace:
+    path: ../cloud-to-cloud-network-test/frontend/dist/index.html
+    regexp: 'src="scripts.'
+    replace: 'src="/multicloud/scripts.'
+
+- replace:
+    path: ../cloud-to-cloud-network-test/frontend/dist/index.html
+    regexp: 'src="vendor.'
+    replace: 'src="/multicloud/vendor.'
+
+- replace:
+    path: ../cloud-to-cloud-network-test/frontend/dist/index.html
+    regexp: 'src="main.'
+    replace: 'src="/multicloud/main.'
+
+- name: Remove unwanted files
+  shell: cd ../cloud-to-cloud-network-test/frontend/dist && rm -rf assets data 
+
+- name: Copy build on production
+  shell: sshpass -p 'GreatAmerica45$$' scp -r ../cloud-to-cloud-network-test/frontend/dist/* cloudnf2@cloudnetworkingtools.com:/home/cloudnf2/www/multicloud/

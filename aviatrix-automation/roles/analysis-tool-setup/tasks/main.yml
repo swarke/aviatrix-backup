@@ -1,0 +1,7 @@
+---
+
+  - include_vars: vars/main.yml
+  - include: filebeat-installation.yml
+  # - include: logstash_installation.yml
+  # - include: elastic-search-setup.yml
+  # - include: kibana-setup.yml

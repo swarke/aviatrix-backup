@@ -1,0 +1,9 @@
+asia_east1_a_region:
+  zone: asia-east1-a
+  instance_names: test-machine #aviatrix-asia-east1-a-do-not-stop
+
+dev_env:
+  service_account_email: 28843337154-compute@developer.gserviceaccount.com
+  credentials_file: gcp-creds.json
+  project_id: burnished-ether-168821
+  bash_script: \#!/bin/sh\nPATH=/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin\ncurl https://s3.amazonaws.com/multi-cloud-instance-script/instance_speedtest.py -o /home/azadmin/instance_speedtest.py\nchmod a+x /home/azadmin/instance_speedtest.py\nhello

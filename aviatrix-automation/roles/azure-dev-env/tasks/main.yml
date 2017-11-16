@@ -1,0 +1,4 @@
+---
+
+  - include_vars: vars/main.yml
+  - include: launch.yml

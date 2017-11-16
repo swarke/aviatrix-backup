@@ -1,0 +1,13 @@
+- copy: 
+  src: logstash.repo
+  dest: /etc/yum.repos.d/logstash.repo
+
+- name: Install logstash
+  shell: 'yum -y install logstash'
+
+- copy: 
+  src: logstash-config.conf
+  dest: /etc/logstash/conf.d/config.conf
+
+- name: Start logstash service
+  shell: 'systemctl restart logstash && chkconfig logstash on'

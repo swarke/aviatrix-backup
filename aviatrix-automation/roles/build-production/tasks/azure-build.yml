@@ -1,0 +1,62 @@
+- lineinfile:
+    path: ../network-performance-test/src/index.html
+    regexp: '<base href="/">'
+    line: '<base href="/azure">'
+
+- replace:
+    path: ../network-performance-test/src/app/app-routing.module.ts
+    regexp: "{ path: 'aws/speedtest', component: AWSComponent },"
+    replace: ""
+
+- replace:
+    path: ../network-performance-test/src/app/app-routing.module.ts
+    regexp: "{ path: 'gce/speedtest', component: GCEComponent },"
+    replace: ""
+
+- replace:
+    path: ../network-performance-test/src/app/app-routing.module.ts
+    regexp: "{ path: 'azure/speedtest', component: AzureComponent}"
+    replace: "{ path: 'speedtest', component: AzureComponent }"
+  
+- name: Execute the command in remote shell
+  shell: cd ../network-performance-test/  && ng build --prod --aot
+
+- replace:
+    path: ../network-performance-test/dist/index.html
+    regexp: '<link href="styles.'
+    replace: '<link href="/azure/styles.'
+
+- replace:
+    path: ../network-performance-test/dist/index.html
+    regexp: 'src="inline.'
+    replace: 'src="/azure/inline.'
+
+- replace:
+    path: ../network-performance-test/dist/index.html
+    regexp: 'src="polyfills.'
+    replace: 'src="/azure/polyfills.'
+
+- replace:
+    path: ../network-performance-test/dist/index.html
+    regexp: 'src="scripts.'
+    replace: 'src="/azure/scripts.'
+
+- replace:
+    path: ../network-performance-test/dist/index.html
+    regexp: 'src="vendor.'
+    replace: 'src="/azure/vendor.'
+
+- replace:
+    path: ../network-performance-test/dist/index.html
+    regexp: 'src="main.'
+    replace: 'src="/azure/main.'
+
+- name: Remove unwanted files
+  shell: cd ../network-performance-test/dist && rm -rf assets data 
+
+- name: Revert changes
+  shell: cd ../ && git checkout . 
+
+- name: Copy build on production
+  shell: sshpass -p 'GreatAmerica45$$' scp -r ../network-performance-test/dist/* cloudnf2@cloudnetworkingtools.com:/home/cloudnf2/www/azure/
+  

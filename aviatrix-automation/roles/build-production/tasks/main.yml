@@ -1,0 +1,7 @@
+---
+
+  - include_vars: vars/main.yml
+  - include: aws-build.yml
+  - include: azure-build.yml
+  - include: gce-build.yml
+  - include: multi-cloud-build.yml

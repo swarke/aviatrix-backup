@@ -1,0 +1,77 @@
+---
+
+  - name: Launch the new EC2 Instance
+    local_action: ec2 
+                  aws_access_key={{ dev_env.aws_access_key }}
+                  aws_secret_key={{ dev_env.aws_secret_key }}
+                  group={{ dev_env.security_group }} 
+                  instance_type={{ dev_env.instance_type}} 
+                  image={{ dev_env.image }} 
+                  wait=true 
+                  region={{ dev_env.region }} 
+                  keypair={{ dev_env.key_pair }}
+                  count=1
+                  user_data="#!/bin/sh 
+                              apt-get update -y 
+                              apt-get install nginx -y"
+    register: ec2_obj
+  
+  - name: Add region name in hosts
+    local_action: lineinfile 
+                  dest="./hosts" 
+                  regexp='(^\s+kernel(\s+(?!audit=1)[\w=/\-\.]+)*)\s*$'
+                  line=[{{ dev_env.region }}]
+
+  - name: Add the newly created EC2 instance(s) to the local host group (located inside the directory)
+    local_action: lineinfile 
+                  dest="./hosts" 
+                  regexp='(^\s+kernel(\s+(?!audit=1)[\w=/\-\.]+)*)\s*$'
+                  line={{ item.public_ip }}
+    with_items: "{{ ec2_obj.instances }}"
+
+
+  - name: Wait for SSH to come up
+    local_action: wait_for 
+                  host={{ item.public_ip }} 
+                  port=22 
+                  state=started
+    with_items: "{{ ec2_obj.instances }}"
+
+  - name: Add tag to Instance(s)
+    local_action: ec2_tag 
+                  resource={{ item.id }} 
+                  region={{ dev_env.region }} 
+                  state=present
+    with_items: "{{ ec2_obj.instances }}"
+    args:
+      tags:
+        Name: "{{ dev_env.instance_tags.name }}"
+
+  # - name: NGINX | Starting NGINX
+  #   hosts: "{{ item.public_ip }}"
+  #   shell: apt-get install nginx -y
+  #   with_items: "{{ ec2_obj.instances }}"
+
+  # - ec2:
+  #     key_name: "{{ dev_env.key_name }}"
+  #     assign_public_ip: yes
+  #     # sg_groupp_id: "{{ dev_env.sg_group }}"
+  #     instance_type: "{{ dev_env.instance_type }}"
+  #     image: "{{ dev_env.image }}"
+  #     wait: true
+  #     wait_timeout: 600
+  #     exact_count: 1
+  #     region: "{{ dev_env.region}}"
+  #     vpc_subnet_id: "{{ dev_env.vpc_subnet_id}}"
+  #     count_tag:
+  #       Name: "{{ dev_env.count_tag.name }}"
+  #     instance_tags:
+  #       Name: "{{ dev_env.instance_tags.name }}"
+  #       Owner: "{{ dev_env.instance_tags.owner }}"
+  #       Project: "{{ dev_env.instance_tags.project }}"
+  #     aws_access_key: "{{ dev_env.aws_access_key }}"
+  #     aws_secret_key: "{{ dev_env.aws_secret_key }}"
+  #   register: deploy_instance
+
+  # - debug: msg="{{ deploy_instance }}"
+  # 

@@ -1,0 +1,27 @@
+- name: set the debian package for kibana
+  shell: 'echo "deb http://packages.elastic.co/kibana/4.4/debian stable main" | sudo tee -a /etc/apt/sources.list.d/kibana-4.4.x.list'
+
+- name: install kibana service
+  shell: 'apt-get update && apt-get -y install kibana'
+
+- copy: copy kibana configuration
+    src: kibana.yml
+    dest: /opt/kibana/config/kibana.yml
+
+- name: Start the kibana service
+  shell: 'update-rc.d kibana defaults 96 9 && service kibana start'
+
+- name: Install nginx service
+  shell: 'apt-get install nginx apache2-utils'
+
+- htpasswd:
+    path: /etc/nginx/htpasswd.users
+    name: admin
+    password: 'aviatrix'
+
+- copy: copy nginx default configuration
+    src: nginx-default-config
+    dest: /etc/nginx/sites-enabled/default
+
+- name: start nginx server
+  shell: 'service nginx restart'

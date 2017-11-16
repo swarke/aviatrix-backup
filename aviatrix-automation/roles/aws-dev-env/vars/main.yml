@@ -1,0 +1,14 @@
+dev_env:
+  instance_type: t2.micro
+  image: ami-c2ee9dad
+  region: ap-south-1
+  count_tag:
+    name: monitoring-master-server
+  instance_tags:
+    name: auto-poc
+  aws_access_key: AKIAI52DHPYGJUNCPDFQ
+  aws_secret_key: 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
+  vpc_subnet_id: subnet-0a269747
+  security_group: mumbai-aviatrix-agent-do-not-stop
+  key_pair: mumbai-aws-tool
+  # tag_name: {{ region "aviatrix-agent-do-not-stop" }}

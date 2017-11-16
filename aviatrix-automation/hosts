@@ -1,0 +1,7 @@
+[dev]
+54.68.9.133
+[dev:vars]
+ansible_ssh_private_key_file=/home/ramesh/Downloads/speedtest_key_pair.pem
+ansible_user=centos
+ansible_port=22
+

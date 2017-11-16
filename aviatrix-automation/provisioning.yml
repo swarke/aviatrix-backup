@@ -1,0 +1,13 @@
+---
+
+  - hosts: all
+    # connection: local
+    become: yes
+    roles:
+      # - aws-dev-env
+      # - azure-dev-env
+      # - gce-dev-env
+      # - build-production
+      - analysis-tool-setup
+
+  

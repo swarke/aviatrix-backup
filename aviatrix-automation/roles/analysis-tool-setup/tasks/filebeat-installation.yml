@@ -1,0 +1,25 @@
+- name: Set rpm package for java8
+  shell: 'cd ~ && wget --no-cookies --no-check-certificate --header "Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; oraclelicense=accept-securebackup-cookie" "http://download.oracle.com/otn-pub/java/jdk/8u73-b02/jdk-8u73-linux-x64.rpm"'
+
+- name: Remove JDK packages
+  shell: rm ~/jdk-8u*-linux-x64.rpm
+
+- name: Set elastic search filebeat-index-template
+  shell: 'cd ~ && curl -O https://gist.githubusercontent.com/thisismitch/3429023e8438cc25b86c/raw/d8c479e2a1adcea8b1fe86570e42abab0f10f364/filebeat-index-template.json'
+
+- name: import elastic rpm
+  shell: 'rpm --import http://packages.elastic.co/GPG-KEY-elasticsearch'
+
+- copy: 
+  src: elastic-beats.repo
+  dest: /etc/yum.repos.d/elastic-beats.repo
+
+- name: Install filebeat
+  shell: 'yum -y install filebeat'
+
+- copy: 
+  src: filebeat.yml
+  dest: /etc/filebeat/filebeat.yml
+
+- name: Start filebeat service
+  shell: 'systemctl start filebeat && systemctl enable filebeat'

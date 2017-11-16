@@ -1,0 +1,114 @@
+<ng2-slim-loading-bar [color]="'#ee7600'"></ng2-slim-loading-bar>
+<div class="row mrg-top-15">
+  <!-- Connectivity Network Panel -->
+  <div class="col-sm-6 pad-right-none">
+    <div class="card card-radious-none left-full-panel">
+      <div class="card-header margin-bottom-25">
+        <div class="row margin-top-5">
+          <div class="col-6 col-sm-6 padding-right-none">
+            <h6 class="card-title card-title-margin">{{properties.RIGHT_PANEL_HEADER}} <span>&nbsp;  <i class="fa fa-info-circle fa-lg info-color cursor-pointer" aria-hidden="true" mdTooltip="{{properties.RIGHT_PANEL_TOOLTIP}}"></i></span></h6>        
+          </div>
+          <div class="col-5 col-sm-5">
+            <span class="card-title"> Source Location : {{sourceLocation}}</span>
+          </div>
+          <div class="col-1 col-sm-1 text-align-right margin-top-minus-5">
+            <img class="loader-style" src="../assets/loader.gif" *ngIf="disabledStart">
+          </div>
+        </div>
+      </div>
+      <div class="card-block test-card-height padding-top-none">
+        <div class="row margin-bottom-25 margin-left-none">
+          <div id="bestRegionBorder" class="col-sm-6 right-stat-panel right-latency-panel-border" [style.border-left-color]="bestLatencyRegion && bestLatencyRegion.latency != 0.0 ? bestLatencyRegion.color : '#26db68' ">
+            <span class="font-weight-500">{{getBestlatencyregion()}}</span>
+            <br>
+            <span class="text-12">Best region for latency sensitive apps</span>
+          </div>
+        </div>
+        <div class="height-155">
+          <table class="table table-striped table-header-containt">
+            <thead>
+              <tr>
+                <th width="75%">
+                  <span class="column-header" *ngIf="visibleSortOption" (click)="sortBy('region_name')">{{properties.RIGHT_PANEL_REGION_COLUMN_HEADER}} 
+                        <i class="fa sort-style" [ngClass]="{'fa-sort': sortableColumn != 'region_name', 'fa-sort-asc': (sortableColumn == 'region_name' && !isDesc), 'fa-sort-desc': (sortableColumn == 'region_name' && isDesc) }" aria-hidden="true"> </i>
+                    </span>
+                  <span class="column-header" *ngIf="!visibleSortOption">{{properties.RIGHT_PANEL_REGION_COLUMN_HEADER}} 
+                    </span>
+                </th>
+                <th width="25%" class="padding-left-2">
+                  <span class="column-header" *ngIf="visibleSortOption" (click)="sortBy('latency')">{{properties.RIGHT_PANEL_LATENCY_COLUMN_HEADER}} 
+                        <i class="fa sort-style" [ngClass]="{'fa-sort': sortableColumn != 'latency', 'fa-sort-asc': (sortableColumn == 'latency' && isDesc), 'fa-sort-desc': (sortableColumn == 'latency' && !isDesc) }" aria-hidden="true">
+                        </i>
+                    </span>
+                  <span class="column-header" *ngIf="!visibleSortOption">{{properties.RIGHT_PANEL_LATENCY_COLUMN_HEADER}} 
+                    </span>
+                </th>
+              </tr>
+            </thead>
+          </table>
+          <div class="stat-table-overlay">
+            <table class="table table-striped">
+              <tbody>
+                <tr *ngFor="let region of locations">
+                  <td width="75%">{{region.region_name}}</td>
+                  <td class="padding-left-15 width-30" *ngIf="!region.latency && !disabledStart">{{properties.NA_TEXT}}</td>
+                  <td class="padding-left-15" width="25%" *ngIf="!region.latency && disabledStart">{{readLatestLatency(region)}}</td>
+                  <td class="padding-left-15" width="25%" *ngIf="region.latency">{{region.latency}}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="flow-buttons-bottom">
+        <button class="btn btn-stop pull-right" (click)="stopTest();" [disabled]="!disabledStart" *ngIf="disabledStart"> <i class="fa fa-stop" aria-hidden="true"></i>&nbsp;&nbsp;{{properties.STOP}}</button>
+        <button class="btn btn-start pull-right" (click)="startTest();" [disabled]="disabledStart" *ngIf="!disabledStart"><i class="fa fa-play" aria-hidden="true"></i>&nbsp;&nbsp;{{properties.START}}</button>
+      </div>
+    </div>
+  </div>
+  <!-- End of Connectivity Network Panel -->
+  <!-- Region and Chart Panel -->
+  <div class="col-sm-6">
+    <div class="card card-radious-none height-365">
+      <div class="card-header">
+        <div class="row margin-top-5">
+          <div class="col-sm-6">
+            <h6 class="card-title card-title-margin">{{leftPanelHeader}}</h6>
+          </div>
+        </div>
+      </div>
+      <div class="card-block padding-none">
+        <div id="map" class="height-306"></div>
+      </div>
+    </div>
+    <div class="card card-radious-none height-365">
+      <div class="card-header">
+        <div class="row">
+          <div class="col-sm-9">
+            <h6 class="card-title card-title-margin">{{properties.LATENCY_CHART_HEADER}} <span>&nbsp; <i class="fa fa-info-circle fa-lg info-color cursor-pointer" aria-hidden="true" mdTooltip="{{properties.LATENCY_CHART_TOOLTIP}}" mdTooltipPosition="right"></i></span></h6></div>
+          <div class="col-sm-3 text-align-right">
+            <img class="loader-style" src="../assets/loader.gif" *ngIf="disabledStart">
+          </div>
+        </div>
+      </div>
+      <div class="card-block" #latencyCard>
+        <chart [options]="latencyOptions" (load)="latencyInstance($event.context)" *ngIf="latencyOptions !== null" class="chart-height display-block"></chart>
+        <h6 *ngIf="latencyOptions === null" class="latency-chart-data-not-avialable-text">Click on Begin Speed Test on the top of the page.</h6>
+      </div>
+    </div>
+  </div>
+  <!-- End of Region ad Chart Panel -->
+</div>
+
+
+<div *ngIf="isEmailPopOpen">
+  <div class="md-overlay-container overlay">
+    <div id="mat-overlay-0" class="mat-overlay-pane dialog-position">
+      <div class="dialog-size">
+        <div style="text-align:center; padding:15px;">
+          <form name="emailForm" id="mktoForm_1143"></form>
+        </div>
+      </div>
+    </div>
+  </div>
+ </div>
